@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}Cadastro - Jogo da Forca Online{% endblock %}
+
+{% block content %}
+<div style="max-width: 400px; margin: 0 auto;">
+    <h1> Criar Conta</h1>
+    
+    <form method="POST" action="{{ url_for('auth.register') }}">
+        <div class="form-group">
+            <label for="name">Nome:</label>
+            <input 
+                type="text" 
+                id="name" 
+                name="name" 
+                required
+                placeholder="Seu nome completo"
+                value="{{ request.form.get('name', '') }}"
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                required
+                placeholder="seu@email.com"
+                value="{{ request.form.get('email', '') }}"
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="password">Senha:</label>
+            <input 
+                type="password" 
+                id="password" 
+                name="password" 
+                required
+                placeholder="Escolha uma senha forte"
+                minlength="6"
+            >
+            <small style="color: #666; display: block; margin-top: 0.5rem;">
+                Mínimo 6 caracteres
+            </small>
+        </div>
+
+        <div class="form-group">
+            <label for="confirm_password">Confirmar Senha:</label>
+            <input 
+                type="password" 
+                id="confirm_password" 
+                name="confirm_password" 
+                required
+                placeholder="Repita a senha"
+                minlength="6"
+            >
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-bottom: 1rem;">
+            Criar Conta
+        </button>
+    </form>
+
+    <div style="text-align: center; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #ddd;">
+        <p style="color: #666; margin-bottom: 1rem;">
+            Já tem uma conta?
+        </p>
+        <a href="{{ url_for('auth.login') }}" class="btn btn-secondary" style="width: 100%; text-align: center;">
+            Fazer Login
+        </a>
+    </div>
+
+    <!-- Termos -->
+    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; margin-top: 2rem; font-size: 0.85rem; text-align: center; color: #666; line-height: 1.6;">
+        <p>
+            Ao se cadastrar, você concorda com nossos 
+            <a href="#" style="color: #667eea; text-decoration: none;">Termos de Serviço</a> e 
+            <a href="#" style="color: #667eea; text-decoration: none;">Política de Privacidade</a>.
+        </p>
+    </div>
+</div>
+
+<style>
+    h1 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 2rem;
+    }
+
+    form {
+        margin: 0;
+    }
+
+    .form-group label {
+        font-weight: 600;
+        color: #333;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+        border: 2px solid #e0e0e0;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="password"]:focus {
+        border-color: #667eea;
+    }
+</style>
+{% endblock %}

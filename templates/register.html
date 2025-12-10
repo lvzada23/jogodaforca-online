@@ -6,16 +6,16 @@
 <div style="max-width: 400px; margin: 0 auto;">
     <h1>📝 Criar Conta</h1>
     
-    <form method="POST" action="/register">
+    <form method="POST" action="{{ url_for('auth.register') }}">
         <div class="form-group">
-            <label for="nome">Nome:</label>
+            <label for="name">Nome:</label>
             <input 
                 type="text" 
-                id="nome" 
-                name="nome" 
+                id="name" 
+                name="name" 
                 required
                 placeholder="Seu nome completo"
-                value="{{ request.form.get('nome', '') }}"
+                value="{{ request.form.get('name', '') }}"
             >
         </div>
 
@@ -32,11 +32,11 @@
         </div>
 
         <div class="form-group">
-            <label for="senha">Senha:</label>
+            <label for="password">Senha:</label>
             <input 
                 type="password" 
-                id="senha" 
-                name="senha" 
+                id="password" 
+                name="password" 
                 required
                 placeholder="Escolha uma senha forte"
                 minlength="6"
@@ -47,11 +47,11 @@
         </div>
 
         <div class="form-group">
-            <label for="confirmacao">Confirmar Senha:</label>
+            <label for="confirm_password">Confirmar Senha:</label>
             <input 
                 type="password" 
-                id="confirmacao" 
-                name="confirmacao" 
+                id="confirm_password" 
+                name="confirm_password" 
                 required
                 placeholder="Repita a senha"
                 minlength="6"
@@ -67,14 +67,9 @@
         <p style="color: #666; margin-bottom: 1rem;">
             Já tem uma conta?
         </p>
-        <a href="/login" class="btn btn-secondary" style="width: 100%; text-align: center;">
+        <a href="{{ url_for('auth.login') }}" class="btn btn-secondary" style="width: 100%; text-align: center;">
             Fazer Login
         </a>
-    </div>
-
-    <!-- Links úteis -->
-    <div style="text-align: center; margin-top: 1.5rem;">
-        <a href="/" style="color: #667eea; text-decoration: none;">← Voltar ao Menu</a>
     </div>
 
     <!-- Termos -->

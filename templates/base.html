@@ -261,18 +261,18 @@
             <li class="brand">🎮 Jogo da Forca Online</li>
             <li>
                 <div class="nav-right">
-                    {% if current_user.is_authenticated %}
-                        <a href="/">Jogar</a>
-                        <a href="/profile">Perfil</a>
+                    {% if session.get('user_id') %}
+                        <a href="{{ url_for('menu.index') }}">Jogar</a>
+                        <a href="{{ url_for('user.profile') }}">Perfil</a>
                         <div class="user-info">
-                            👤 {{ current_user.nome }} (Nível {{ current_user.nivel }})
+                            👤 {{ session.get('user_name') }} (Nível {{ session.get('user_level', 10) }})
                         </div>
-                        <form method="POST" action="/logout" style="display:inline;">
+                        <form method="POST" action="{{ url_for('auth.logout') }}" style="display:inline;">
                             <button type="submit" class="logout-btn">Sair</button>
                         </form>
                     {% else %}
-                        <a href="/login">Login</a>
-                        <a href="/register">Cadastro</a>
+                        <a href="{{ url_for('auth.login') }}">Login</a>
+                        <a href="{{ url_for('auth.register') }}">Cadastro</a>
                     {% endif %}
                 </div>
             </li>

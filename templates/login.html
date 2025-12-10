@@ -6,7 +6,7 @@
 <div style="max-width: 400px; margin: 0 auto;">
     <h1>🔐 Faça Login</h1>
     
-    <form method="POST" action="/login">
+    <form method="POST" action="{{ url_for('auth.login') }}">
         <div class="form-group">
             <label for="email">Email:</label>
             <input 
@@ -39,14 +39,9 @@
         <p style="color: #666; margin-bottom: 1rem;">
             Não tem uma conta?
         </p>
-        <a href="/register" class="btn btn-secondary" style="width: 100%; text-align: center;">
+        <a href="{{ url_for('auth.register') }}" class="btn btn-secondary" style="width: 100%; text-align: center;">
             Criar Conta
         </a>
-    </div>
-
-    <!-- Links úteis -->
-    <div style="text-align: center; margin-top: 1.5rem;">
-        <a href="/" style="color: #667eea; text-decoration: none;">← Voltar ao Menu</a>
     </div>
 </div>
 

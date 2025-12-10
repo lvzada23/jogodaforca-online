@@ -97,17 +97,17 @@
 
     <!-- Botões de Ação -->
     <div style="display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; justify-content: center;">
-        <form method="POST" action="/game/new">
-            <input type="hidden" name="modo" value="{{ game.modo }}">
-            <input type="hidden" name="dificuldade" value="{{ game.dificuldade }}">
+        <form method="POST" action="{{ url_for('menu.index') }}">
+            <input type="hidden" name="mode" value="{{ game.modo }}">
+            <input type="hidden" name="difficulty" value="{{ game.dificuldade }}">
             <button type="submit" class="btn btn-primary">
                 🔄 Jogar Novamente
             </button>
         </form>
         
-        <a href="/" class="btn btn-secondary">🏠 Menu Principal</a>
+        <a href="{{ url_for('menu.index') }}" class="btn btn-secondary">🏠 Menu Principal</a>
         
-        <a href="/profile" class="btn btn-success">📊 Ver Perfil</a>
+        <a href="{{ url_for('user.profile') }}" class="btn btn-success">📊 Ver Perfil</a>
     </div>
 
     <!-- Compartilhar Resultado (Social) -->

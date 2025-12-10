@@ -4,22 +4,15 @@
 
 {% block content %}
 <div style="max-width: 900px; margin: 0 auto;">
-    <h1>👤 Meu Perfil</h1>
+    <h1> Meu Perfil</h1>
 
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin: 2rem 0;">
         <!-- Informações Básicas -->
         <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 10px; color: white;">
             <h3 style="margin-bottom: 1rem;">Informações Pessoais</h3>
             <div style="line-height: 2;">
-                <p><strong>Nome:</strong> {{ current_user.nome }}</p>
-                <p><strong>Email:</strong> {{ current_user.email }}</p>
-                <p><strong>Data de Cadastro:</strong> 
-                    {% if current_user.data_cadastro %}
-                        {{ current_user.data_cadastro.strftime('%d/%m/%Y') }}
-                    {% else %}
-                        Não disponível
-                    {% endif %}
-                </p>
+                <p><strong>Nome:</strong> {{ session.get('user_name') }}</p>
+                <p><strong>Email:</strong> {{ session.get('user_email') }}</p>
             </div>
         </div>
 
@@ -27,9 +20,9 @@
         <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 2rem; border-radius: 10px; color: white;">
             <h3 style="margin-bottom: 1rem;">Estatísticas</h3>
             <div style="line-height: 2;">
-                <p><strong>Nível:</strong> {{ current_user.nivel }}</p>
-                <p><strong>Pontos:</strong> {{ current_user.pontos }}</p>
-                <p><strong>Próximo Nível:</strong> {{ (current_user.nivel + 1) * 100 - current_user.pontos }} pontos</p>
+                <p><strong>Nível:</strong> {{ session.get('user_level', 10) }}</p>
+                <p><strong>Pontos:</strong> {{ session.get('user_points', 0) }}</p>
+                <p><strong>Próximo Nível:</strong> {{ (session.get('user_level', 10) + 1) * 100 - session.get('user_points', 0) }} pontos</p>
             </div>
         </div>
 
@@ -114,18 +107,18 @@
         
         <div style="margin-bottom: 1.5rem;">
             <h3 style="margin-bottom: 1rem;">Alterar Senha</h3>
-            <form method="POST" action="/profile/change-password">
+            <form method="POST" action="{{ url_for('user.change_password') }}">
                 <div class="form-group" style="max-width: 400px;">
-                    <label for="senha-atual">Senha Atual:</label>
-                    <input type="password" id="senha-atual" name="senha-atual" required placeholder="Digite sua senha atual">
+                    <label for="current_password">Senha Atual:</label>
+                    <input type="password" id="current_password" name="current_password" required placeholder="Digite sua senha atual">
                 </div>
                 <div class="form-group" style="max-width: 400px;">
-                    <label for="nova-senha">Nova Senha:</label>
-                    <input type="password" id="nova-senha" name="nova-senha" required placeholder="Digite a nova senha" minlength="6">
+                    <label for="new_password">Nova Senha:</label>
+                    <input type="password" id="new_password" name="new_password" required placeholder="Digite a nova senha" minlength="6">
                 </div>
                 <div class="form-group" style="max-width: 400px;">
-                    <label for="confirma-senha">Confirmar Nova Senha:</label>
-                    <input type="password" id="confirma-senha" name="confirma-senha" required placeholder="Repita a nova senha" minlength="6">
+                    <label for="confirm_new_password">Confirmar Nova Senha:</label>
+                    <input type="password" id="confirm_new_password" name="confirm_new_password" required placeholder="Repita a nova senha" minlength="6">
                 </div>
                 <button type="submit" class="btn btn-primary">Atualizar Senha</button>
             </form>
@@ -133,7 +126,7 @@
 
         <div style="border-top: 1px solid #ddd; padding-top: 1.5rem; margin-top: 1.5rem;">
             <h3 style="margin-bottom: 1rem;">Zona de Risco</h3>
-            <form method="POST" action="/profile/delete" style="max-width: 400px;">
+            <form method="POST" action="{{ url_for('user.delete_account') }}" style="max-width: 400px;">
                 <p style="color: #666; margin-bottom: 1rem;">
                     Excluir sua conta é uma ação permanente. Todos os seus dados serão apagados.
                 </p>
@@ -146,7 +139,7 @@
 
     <!-- Botão Voltar -->
     <div style="text-align: center; margin-top: 2rem;">
-        <a href="/" class="btn btn-secondary">← Voltar ao Menu</a>
+        <a href="{{ url_for('menu.index') }}" class="btn btn-secondary">← Voltar ao Menu</a>
     </div>
 </div>
 

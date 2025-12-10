@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% block title %}Resultado do Jogo - Jogo da Forca Online{% endblock %}
+
+{% block content %}
+<div style="text-align: center; max-width: 600px; margin: 0 auto;">
+    {% if result == 'win' %}
+        <!-- Tela de Vitória -->
+        <div style="background: linear-gradient(135deg, #51cf66 0%, #40c057 100%); padding: 3rem 2rem; border-radius: 15px; color: white; margin-bottom: 2rem;">
+            <div style="font-size: 4rem; margin-bottom: 1rem;">🎉</div>
+            <h1 style="color: white; margin-bottom: 1rem;">Parabéns! Você Venceu!</h1>
+            <p style="font-size: 1.2rem; margin-bottom: 1rem;">
+                Você adivinhou a palavra: <strong>{{ game.palavra }}</strong>
+            </p>
+            <div style="background: rgba(0, 0, 0, 0.2); padding: 1.5rem; border-radius: 10px; margin: 1rem 0;">
+                <p style="font-size: 1.1rem; margin: 0.5rem 0;">
+                    ⚡ Tentativas Restantes: <strong>{{ game.tentativas_restantes }}</strong>
+                </p>
+                <p style="font-size: 1.1rem; margin: 0.5rem 0;">
+                    ⭐ Pontos Ganhos: <strong id="pontos-ganhos">+150</strong>
+                </p>
+                <p style="font-size: 1.1rem; margin: 0.5rem 0;">
+                    📊 Novo Total: <strong>{{ current_user.pontos }}</strong>
+                </p>
+            </div>
+        </div>
+
+    {% elif result == 'lose' %}
+        <!-- Tela de Derrota -->
+        <div style="background: linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%); padding: 3rem 2rem; border-radius: 15px; color: white; margin-bottom: 2rem;">
+            <div style="font-size: 4rem; margin-bottom: 1rem;">😢</div>
+            <h1 style="color: white; margin-bottom: 1rem;">Game Over! Você Perdeu!</h1>
+            <p style="font-size: 1.2rem; margin-bottom: 1rem;">
+                A palavra era: <strong>{{ game.palavra }}</strong>
+            </p>
+            <div style="background: rgba(0, 0, 0, 0.2); padding: 1.5rem; border-radius: 10px; margin: 1rem 0;">
+                <p style="font-size: 1.1rem; margin: 0.5rem 0;">
+                    Modo: <strong>{{ game.modo|upper }}</strong> - 
+                    Dificuldade: <strong>
+                        {% if game.dificuldade == 'easy' %}🟢 Fácil
+                        {% elif game.dificuldade == 'medium' %}🟡 Médio
+                        {% else %}🔴 Difícil{% endif %}
+                    </strong>
+                </p>
+                <p style="font-size: 1.1rem; margin: 0.5rem 0;">
+                    ⚡ Tempo de Jogo: <strong id="tempo-jogo">2 min 45 seg</strong>
+                </p>
+                <p style="font-size: 1.1rem; margin: 0.5rem 0;">
+                    📊 Pontos: <strong>-25</strong>
+                </p>
+            </div>
+        </div>
+
+    {% endif %}
+
+    <!-- Estatísticas do Jogo -->
+    <div style="background: #f8f9fa; padding: 2rem; border-radius: 10px; margin: 2rem 0;">
+        <h2 style="margin-bottom: 1.5rem;">📊 Estatísticas da Partida</h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; text-align: left;">
+            <div style="background: white; padding: 1rem; border-radius: 5px; border-left: 4px solid #667eea;">
+                <p style="color: #666; font-size: 0.9rem;">Letras Certas</p>
+                <p style="font-size: 1.2rem; font-weight: bold; color: #51cf66;">
+                    {{ game.letras_certas|length }}
+                </p>
+            </div>
+            <div style="background: white; padding: 1rem; border-radius: 5px; border-left: 4px solid #ff6b6b;">
+                <p style="color: #666; font-size: 0.9rem;">Letras Erradas</p>
+                <p style="font-size: 1.2rem; font-weight: bold; color: #ff6b6b;">
+                    {{ game.letras_erradas|length }}
+                </p>
+            </div>
+            <div style="background: white; padding: 1rem; border-radius: 5px; border-left: 4px solid #4facfe;">
+                <p style="color: #666; font-size: 0.9rem;">Tempo</p>
+                <p style="font-size: 1.2rem; font-weight: bold; color: #4facfe;">
+                    {% if game.tempo_total %}
+                        {{ game.tempo_total }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </p>
+            </div>
+            <div style="background: white; padding: 1rem; border-radius: 5px; border-left: 4px solid #f093fb;">
+                <p style="color: #666; font-size: 0.9rem;">Dificuldade</p>
+                <p style="font-size: 1.2rem; font-weight: bold;">
+                    {% if game.dificuldade == 'easy' %}
+                        🟢 Fácil
+                    {% elif game.dificuldade == 'medium' %}
+                        🟡 Médio
+                    {% else %}
+                        🔴 Difícil
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botões de Ação -->
+    <div style="display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; justify-content: center;">
+        <form method="POST" action="/game/new">
+            <input type="hidden" name="modo" value="{{ game.modo }}">
+            <input type="hidden" name="dificuldade" value="{{ game.dificuldade }}">
+            <button type="submit" class="btn btn-primary">
+                🔄 Jogar Novamente
+            </button>
+        </form>
+        
+        <a href="/" class="btn btn-secondary">🏠 Menu Principal</a>
+        
+        <a href="/profile" class="btn btn-success">📊 Ver Perfil</a>
+    </div>
+
+    <!-- Compartilhar Resultado (Social) -->
+    <div style="background: white; padding: 2rem; border-radius: 10px; margin-top: 2rem; border: 1px solid #ddd;">
+        <h3 style="margin-bottom: 1rem;">📢 Compartilhe seu Resultado!</h3>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <button class="btn btn-primary" onclick="compartilharTwitter()">
+                𝕏 Twitter
+            </button>
+            <button class="btn btn-primary" onclick="compartilharFacebook()">
+                f Facebook
+            </button>
+            <button class="btn btn-secondary" onclick="copiarResultado()">
+                📋 Copiar Resultado
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+    h1 {
+        margin: 0;
+    }
+
+    .btn {
+        text-align: center;
+    }
+
+    @media (max-width: 768px) {
+        div[style*="grid-template-columns: repeat(2, 1fr)"] {
+            grid-template-columns: 1fr !important;
+        }
+    }
+</style>
+
+<script>
+    function compartilharTwitter() {
+        const texto = encodeURIComponent(`Acabo de vencer uma partida de Fogo da Forca Online! 🎉 A palavra era: {{ game.palavra }}`);
+        window.open(`https://twitter.com/intent/tweet?text=${texto}`, '_blank');
+    }
+
+    function compartilharFacebook() {
+        window.open('https://www.facebook.com/sharer/sharer.php?u=' + window.location.href, '_blank');
+    }
+
+    function copiarResultado() {
+        const resultado = `
+Resultado do Jogo da Forca:
+Palavra: {{ game.palavra }}
+Letras Certas: {{ game.letras_certas|length }}
+Letras Erradas: {{ game.letras_erradas|length }}
+{% if result == 'win' %}Status: VITÓRIA! 🎉
+Pontos: +150{% else %}Status: DERROTA 😢
+Pontos: -25{% endif %}
+        `.trim();
+        
+        navigator.clipboard.writeText(resultado).then(() => {
+            alert('Resultado copiado para a área de transferência!');
+        });
+    }
+</script>
+{% endblock %}

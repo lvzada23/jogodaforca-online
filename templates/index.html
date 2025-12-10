@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Jogo da Forca Online{% endblock %}
+
+{% block content %}
+<div style="text-align: center;">
+    <h1>🎯 Bem-vindo ao Jogo da Forca Online!</h1>
+    <p style="font-size: 1.1rem; color: #666; margin-bottom: 2rem;">
+        Adivinhe a palavra antes que o boneco seja enforcado!
+    </p>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin: 2rem 0;">
+        <!-- Modo Singleplayer -->
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 10px; color: white;">
+            <h3 style="margin-bottom: 1rem;">🎮 Singleplayer</h3>
+            <p style="margin-bottom: 1.5rem;">Jogue contra o computador em diferentes níveis de dificuldade.</p>
+            <form method="POST" action="/game/new">
+                <input type="hidden" name="modo" value="singleplayer">
+                <div style="margin-bottom: 1rem;">
+                    <label for="difficulty" style="color: white;">Nível de Dificuldade:</label>
+                    <select name="dificuldade" id="difficulty" required style="padding: 0.5rem;">
+                        <option value="">Selecione um nível</option>
+                        <option value="easy">🟢 Fácil</option>
+                        <option value="medium">🟡 Médio</option>
+                        <option value="hard">🔴 Difícil</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Iniciar Jogo</button>
+            </form>
+        </div>
+
+        <!-- Modo Multiplayer -->
+        <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 2rem; border-radius: 10px; color: white;">
+            <h3 style="margin-bottom: 1rem;">👥 Multiplayer</h3>
+            <p style="margin-bottom: 1.5rem;">Desafie outro jogador em tempo real e prove quem é o melhor.</p>
+            <form method="GET" action="/lobby">
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Entrar na Sala</button>
+            </form>
+        </div>
+
+        <!-- Estatísticas -->
+        <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); padding: 2rem; border-radius: 10px; color: white;">
+            <h3 style="margin-bottom: 1rem;">📊 Minhas Estatísticas</h3>
+            <div style="text-align: left; margin: 1rem 0;">
+                <p><strong>Nível:</strong> {{ current_user.nivel if current_user.is_authenticated else 'N/A' }}</p>
+                <p><strong>Pontos:</strong> {{ current_user.pontos if current_user.is_authenticated else 'N/A' }}</p>
+            </div>
+            {% if current_user.is_authenticated %}
+                <a href="/profile" class="btn btn-primary" style="width: 100%; text-align: center;">Ver Perfil</a>
+            {% else %}
+                <p style="font-size: 0.9rem;">Faça login para ver suas estatísticas!</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Instruções -->
+    <div style="background: #f8f9fa; padding: 2rem; border-radius: 10px; margin-top: 2rem; text-align: left;">
+        <h2>📖 Como Jogar</h2>
+        <ol style="line-height: 1.8;">
+            <li>Você verá uma palavra com as letras ocultas (_____)</li>
+            <li>Clique em uma letra para adivinhar</li>
+            <li>Se acertar, a letra aparecerá na palavra</li>
+            <li>Se errar, perde uma tentativa</li>
+            <li>Você tem 6 tentativas antes de perder</li>
+            <li>Adivinhe a palavra inteira para vencer!</li>
+        </ol>
+    </div>
+
+    <!-- Login/Register CTA -->
+    {% if not current_user.is_authenticated %}
+    <div style="background: #667eea; padding: 2rem; border-radius: 10px; margin-top: 2rem; color: white; text-align: center;">
+        <h2>Quer começar a jogar?</h2>
+        <p style="margin: 1rem 0;">Crie uma conta para acompanhar seu progresso e competir com outros jogadores!</p>
+        <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 1rem;">
+            <a href="/login" class="btn btn-primary">Fazer Login</a>
+            <a href="/register" class="btn btn-secondary">Criar Conta</a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    select {
+        background-color: white;
+        color: #333;
+    }
+</style>
+{% endblock %}

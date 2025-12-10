@@ -4,7 +4,7 @@
 
 {% block content %}
 <div style="text-align: center;">
-    <h1>🎯 Bem-vindo ao Jogo da Forca Online!</h1>
+    <h1> Bem-vindo ao Jogo da Forca Online!</h1>
     <p style="font-size: 1.1rem; color: #666; margin-bottom: 2rem;">
         Adivinhe a palavra antes que o boneco seja enforcado!
     </p>
@@ -12,7 +12,7 @@
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin: 2rem 0;">
         <!-- Modo Singleplayer -->
         <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 10px; color: white;">
-            <h3 style="margin-bottom: 1rem;">🎮 Singleplayer</h3>
+            <h3 style="margin-bottom: 1rem;"> Singleplayer</h3>
             <p style="margin-bottom: 1.5rem;">Jogue contra o computador em diferentes níveis de dificuldade.</p>
             <form method="POST" action="{{ url_for('menu.index') }}">
                 <input type="hidden" name="mode" value="singleplayer">
@@ -20,9 +20,9 @@
                     <label for="difficulty" style="color: white;">Nível de Dificuldade:</label>
                     <select name="difficulty" id="difficulty" required style="padding: 0.5rem;">
                         <option value="">Selecione um nível</option>
-                        <option value="easy">🟢 Fácil</option>
-                        <option value="medium">🟡 Médio</option>
-                        <option value="hard">🔴 Difícil</option>
+                        <option value="easy"> Fácil</option>
+                        <option value="medium"> Médio</option>
+                        <option value="hard"> Difícil</option>
                     </select>
                 </div>
                 <button type="submit" class="btn btn-primary" style="width: 100%;">Iniciar Jogo</button>
@@ -31,7 +31,7 @@
 
         <!-- Modo Multiplayer -->
         <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 2rem; border-radius: 10px; color: white;">
-            <h3 style="margin-bottom: 1rem;">👥 Multiplayer</h3>
+            <h3 style="margin-bottom: 1rem;"> Multiplayer</h3>
             <p style="margin-bottom: 1.5rem;">Desafie outro jogador em tempo real e prove quem é o melhor.</p>
             <form method="POST" action="{{ url_for('menu.index') }}">
                 <input type="hidden" name="mode" value="multiplayer">
@@ -41,7 +41,7 @@
 
         <!-- Estatísticas -->
         <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); padding: 2rem; border-radius: 10px; color: white;">
-            <h3 style="margin-bottom: 1rem;">📊 Minhas Estatísticas</h3>
+            <h3 style="margin-bottom: 1rem;"> Minhas Estatísticas</h3>
             <div style="text-align: left; margin: 1rem 0;">
                 <p><strong>Nível:</strong> {{ session.get('user_level', 10) }}</p>
                 <p><strong>Pontos:</strong> {{ session.get('user_points', 0) }}</p>

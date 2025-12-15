@@ -1,3 +1,3 @@
-from flask_sqlalchemy import SQLAlchemy
+from forca_app.extensions import db
 
-db = SQLAlchemy()
+

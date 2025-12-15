@@ -17,6 +17,8 @@ class User(db.Model):
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password: str) -> bool:
+        if not password or not self.password_hash:
+            return False
         return check_password_hash(self.password_hash, password)
 
     # Backwards compatible properties (if other code uses Portuguese names)

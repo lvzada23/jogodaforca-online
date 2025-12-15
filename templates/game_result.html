@@ -20,7 +20,7 @@
                     ⭐ Pontos Ganhos: <strong id="pontos-ganhos">+150</strong>
                 </p>
                 <p style="font-size: 1.1rem; margin: 0.5rem 0;">
-                    📊 Novo Total: <strong>{{ current_user.pontos }}</strong>
+                    📊 Novo Total: <strong>{{ current_user.pontos if current_user else session.get('user_points', 0) }}</strong>
                 </p>
             </div>
         </div>

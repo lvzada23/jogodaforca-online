@@ -5,6 +5,8 @@ from forca_app.models.game import Game
 from forca_app.models.user import User
 from forca_app.services.word_service import get_random_word
 from forca_app.services.game_logic import mascarar_palavra, processar_tentativa, estado_atual
+from forca_app.services.game_logic import finalizar_rodada
+from forca_app.services.bot_ai import bot_choose_letter
 
 
 game_bp = Blueprint("game", __name__, url_prefix="/game")
@@ -30,7 +32,11 @@ def guess_letter():
         flash('Parâmetros inválidos.', 'error')
         return redirect(url_for('menu.index'))
 
-    game = Game.query.get(game_id)
+    try:
+        game = db.session.get(Game, int(game_id))
+    except Exception:
+        game = None
+
     if not game:
         flash('Jogo não encontrado.', 'error')
         return redirect(url_for('menu.index'))
@@ -39,6 +45,12 @@ def guess_letter():
     db.session.commit()
 
     if result.get('status') in ['vitoria', 'derrota']:
+        # Atualiza pontuações e níveis
+        finalizar_rodada(game, result.get('status'))
+        db.session.commit()
+        # Se o jogo terminou, exibir resultado final
+        if game.data_fim:
+            return redirect(url_for('game.result', game_id=game.id, status='final'))
         return redirect(url_for('game.result', game_id=game.id, status=result.get('status')))
 
     return redirect(url_for('game.play', game_id=game.id))
@@ -51,7 +63,11 @@ def abandon_game():
         flash('Jogo inválido.', 'error')
         return redirect(url_for('menu.index'))
 
-    game = Game.query.get(game_id)
+    try:
+        game = db.session.get(Game, int(game_id))
+    except Exception:
+        game = None
+
     if game:
         db.session.delete(game)
         db.session.commit()

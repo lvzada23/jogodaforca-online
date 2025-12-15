@@ -1,4 +1,6 @@
-# Extensão para inicialização do banco de dados (Flask SQLAlchemy)
+# Extensões de app
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
 db = SQLAlchemy()
+migrate = Migrate()

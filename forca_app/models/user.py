@@ -1,4 +1,4 @@
-from . import db
+from forca_app.extensions import db
 from werkzeug.security import generate_password_hash, check_password_hash
 
 

@@ -1,8 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
-from werkzeug.security import generate_password_hash, check_password_hash
 
-from models.user import User
-from extensions import db  # assumindo que você criou um db em extensions.py
+from forca_app.models.user import User
+from forca_app.extensions import db  # uses extensions.db
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
 
@@ -29,8 +28,8 @@ def register():
             return redirect(url_for("auth.register"))
 
         # Cria o novo usuário
-        hashed_password = generate_password_hash(password)
-        new_user = User(name=name, email=email, password=hashed_password)
+        new_user = User(name=name, email=email)
+        new_user.set_password(password)
 
         db.session.add(new_user)
         db.session.commit()
@@ -53,13 +52,15 @@ def login():
         user = User.query.filter_by(email=email).first()
 
         # Usuário ou senha inválidos
-        if not user or not check_password_hash(user.password, password):
+        if not user or not user.check_password(password):
             flash("E-mail ou senha incorretos!", "error")
             return redirect(url_for("auth.login"))
 
         # Salva usuário na sessão
         session["user_id"] = user.id
         session["user_name"] = user.name
+        session["user_level"] = getattr(user, 'level', 10)
+        session["user_points"] = getattr(user, 'points', 0)
 
         flash("Login realizado com sucesso!", "success")
         return redirect(url_for("menu.index"))  # redireciona para o menu do jogo

@@ -1,4 +1,4 @@
-from . import db
+from forca_app.extensions import db
 from datetime import datetime
 
 class Game(db.Model):

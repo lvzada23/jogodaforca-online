@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, redirect, url_for
 import os
 
 from forca_app.extensions import db
@@ -25,6 +25,22 @@ def create_app(test_config=None):
     app.register_blueprint(menu_bp)
     app.register_blueprint(game_bp)
     app.register_blueprint(user_bp)
+
+    # Rota raiz: redireciona para o menu (evita 404 em /)
+    @app.route('/')
+    def root():
+        return redirect(url_for('menu.index'))
+
+    # Disponibiliza `current_user` nos templates com base na sessão
+    @app.context_processor
+    def inject_current_user():
+        from flask import session
+        if 'user_id' in session:
+            # import local para evitar import cycles
+            from forca_app.models.user import User
+            user = User.query.get(session.get('user_id'))
+            return {'current_user': user}
+        return {'current_user': None}
 
     @app.cli.command('create-db')
     def create_db():

@@ -47,7 +47,13 @@ def register():
 def login():
     if request.method == "POST":
         email = request.form.get("email")
-        password = request.form.get("password")
+        # aceitarmos tanto 'password' quanto 'senha' no formulário
+        password = request.form.get("password") or request.form.get("senha")
+
+        # validação básica dos campos
+        if not email or not password:
+            flash("Preencha e-mail e senha!", "error")
+            return redirect(url_for("auth.login"))
 
         user = User.query.filter_by(email=email).first()
 

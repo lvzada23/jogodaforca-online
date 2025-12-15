@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Perfil - {{ current_user.nome }}{% endblock %}
+{% block title %}Perfil - {{ current_user.nome if current_user else session.get('user_name','') }}{% endblock %}
 
 {% block content %}
 <div style="max-width: 900px; margin: 0 auto;">
@@ -30,9 +30,9 @@
         <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); padding: 2rem; border-radius: 10px; color: white;">
             <h3 style="margin-bottom: 1rem;">🏆 Conquistas</h3>
             <div style="line-height: 2;">
-                <p>🥇 Vitórias: <strong>{% if current_user.total_vitórias %}{{ current_user.total_vitórias }}{% else %}0{% endif %}</strong></p>
-                <p>⚔️ Taxa de Vitória: <strong>{% if current_user.taxa_vitória %}{{ current_user.taxa_vitória }}%{% else %}0%{% endif %}</strong></p>
-                <p>🔥 Sequência: <strong>{% if current_user.sequencia_vitórias %}{{ current_user.sequencia_vitórias }}{% else %}0{% endif %}</strong></p>
+                <p>🥇 Vitórias: <strong>{% if current_user and current_user.total_vitórias %}{{ current_user.total_vitórias }}{% else %}0{% endif %}</strong></p>
+                <p>⚔️ Taxa de Vitória: <strong>{% if current_user and current_user.taxa_vitória %}{{ current_user.taxa_vitória }}%{% else %}0%{% endif %}</strong></p>
+                <p>🔥 Sequência: <strong>{% if current_user and current_user.sequencia_vitórias %}{{ current_user.sequencia_vitórias }}{% else %}0{% endif %}</strong></p>
             </div>
         </div>
     </div>
@@ -57,7 +57,7 @@
                     <tbody>
                         {% for game in games %}
                         <tr style="border-bottom: 1px solid #eee;">
-                            <td style="padding: 1rem;">{{ game.data_fim.strftime('%d/%m/%Y %H:%M') }}</td>
+                            <td style="padding: 1rem;">{% if game.data_fim %}{{ game.data_fim.strftime('%d/%m/%Y %H:%M') }}{% else %}—{% endif %}</td>
                             <td style="padding: 1rem;">{{ game.palavra }}</td>
                             <td style="padding: 1rem;">
                                 {% if game.modo == 'singleplayer' %}
@@ -76,14 +76,14 @@
                                 {% endif %}
                             </td>
                             <td style="padding: 1rem; text-align: center;">
-                                {% if game.vencedor_id == current_user.id %}
+                                {% if current_user and game.vencedor_id == current_user.id %}
                                     <span style="background: #51cf66; color: white; padding: 0.25rem 0.75rem; border-radius: 20px; font-weight: bold;">✓ Vitória</span>
                                 {% else %}
                                     <span style="background: #ff6b6b; color: white; padding: 0.25rem 0.75rem; border-radius: 20px; font-weight: bold;">✗ Derrota</span>
                                 {% endif %}
                             </td>
                             <td style="padding: 1rem; text-align: center; font-weight: bold;">
-                                {% if game.vencedor_id == current_user.id %}
+                                {% if current_user and game.vencedor_id == current_user.id %}
                                     +{% if game.dificuldade == 'easy' %}50{% elif game.dificuldade == 'medium' %}100{% else %}200{% endif %}
                                 {% else %}
                                     -25

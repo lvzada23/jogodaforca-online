@@ -20,10 +20,17 @@ class Game(db.Model):
 
     rodada_atual = db.Column(db.Integer, default=1)  # alterna player1/player2
 
+    # Suporte a jogo multi-rodada
+    rounds_total = db.Column(db.Integer, default=2)  # número de rodadas (ex: 2 -> cada jogador joga 1)
+    rounds_completed = db.Column(db.Integer, default=0)
+    wins_p1 = db.Column(db.Integer, default=0)
+    wins_p2 = db.Column(db.Integer, default=0)
+
     data_inicio = db.Column(db.DateTime, default=datetime.utcnow)
     data_fim = db.Column(db.DateTime, nullable=True)
 
     vencedor_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True)
+    
 
     def __repr__(self):
         return f"<Game {self.id} - {self.modo} - Palavra: {self.palavra}>"

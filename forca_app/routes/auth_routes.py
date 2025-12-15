@@ -47,7 +47,13 @@ def register():
 def login():
     if request.method == "POST":
         email = request.form.get("email")
-        password = request.form.get("password")
+        # compatibilidade com templates: login.html usa name="senha"
+        password = request.form.get("password") or request.form.get("senha")
+
+        # validação básica
+        if not email or not password:
+            flash("Preencha e-mail e senha!", "error")
+            return redirect(url_for("auth.login"))
 
         user = User.query.filter_by(email=email).first()
 
@@ -59,6 +65,7 @@ def login():
         # Salva usuário na sessão
         session["user_id"] = user.id
         session["user_name"] = user.name
+        session["user_email"] = user.email
         session["user_level"] = getattr(user, 'level', 10)
         session["user_points"] = getattr(user, 'points', 0)
 

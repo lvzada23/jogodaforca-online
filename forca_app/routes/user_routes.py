@@ -25,7 +25,7 @@ def change_password():
         flash('Você precisa estar logado.', 'error')
         return redirect(url_for('auth.login'))
 
-    user = User.query.get(session.get('user_id'))
+    user = db.session.get(User, session.get('user_id'))
     current = request.form.get('current_password')
     new = request.form.get('new_password')
     confirm = request.form.get('confirm_new_password')
@@ -50,7 +50,7 @@ def delete_account():
         flash('Você precisa estar logado.', 'error')
         return redirect(url_for('auth.login'))
 
-    user = User.query.get(session.get('user_id'))
+    user = db.session.get(User, session.get('user_id'))
     if user:
         # Remover jogos relacionados (opcional)
         Game.query.filter((Game.player1_id == user.id) | (Game.player2_id == user.id)).delete()

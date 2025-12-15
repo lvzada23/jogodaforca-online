@@ -55,6 +55,7 @@
             <!-- Botões de Ação -->
             <div style="margin-top: 1.5rem;">
                 <form method="POST" action="{{ url_for('game.abandon_game') }}" style="margin-bottom: 0.5rem;">
+                    <input type="hidden" name="game_id" value="{{ game.id }}">
                     <button type="submit" class="btn btn-danger" style="width: 100%;">Desistir</button>
                 </form>
                 <a href="{{ url_for('menu.index') }}" class="btn btn-secondary" style="width: 100%; text-align: center;">Voltar ao Menu</a>
@@ -90,6 +91,7 @@
                         </button>
                     {% else %}
                         <form method="POST" action="{{ url_for('game.guess_letter') }}" style="margin: 0;">
+                            <input type="hidden" name="game_id" value="{{ game.id }}">
                             <input type="hidden" name="letra" value="{{ letra }}">
                             <button type="submit" class="letra-btn">{{ letra }}</button>
                         </form>
@@ -106,6 +108,7 @@
                 <!-- Mensagens aparecem aqui -->
             </div>
             <form method="POST" action="{{ url_for('game.send_message') }}" style="display: flex; gap: 0.5rem;">
+                <input type="hidden" name="game_id" value="{{ game.id }}">
                 <input type="text" name="mensagem" placeholder="Digite uma mensagem..." required style="flex: 1;">
                 <button type="submit" class="btn btn-primary">Enviar</button>
             </form>
